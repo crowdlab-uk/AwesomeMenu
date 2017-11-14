@@ -10,25 +10,25 @@
 
 @protocol AwesomeMenuItemDelegate;
 
-@interface AwesomeMenuItem : UIImageView
-{
+@interface AwesomeMenuItem : UIImageView {
+    
     UIImageView *_contentImageView;
     CGPoint _startPoint;
     CGPoint _endPoint;
     CGPoint _nearPoint; // near
     CGPoint _farPoint; // far
     
-    id<AwesomeMenuItemDelegate> __weak _delegate;
+    __unsafe_unretained id<AwesomeMenuItemDelegate> _delegate;
 }
 
-@property (nonatomic, strong, readonly) UIImageView *contentImageView;
+@property (nonatomic, retain, readonly) UIImageView *contentImageView;
 
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic) CGPoint endPoint;
 @property (nonatomic) CGPoint nearPoint;
 @property (nonatomic) CGPoint farPoint;
 
-@property (nonatomic, weak) id<AwesomeMenuItemDelegate> delegate;
+@property (nonatomic, assign) id<AwesomeMenuItemDelegate> delegate;
 
 - (id)initWithImage:(UIImage *)img 
    highlightedImage:(UIImage *)himg

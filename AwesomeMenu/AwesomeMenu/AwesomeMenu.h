@@ -11,18 +11,27 @@
 
 @protocol AwesomeMenuDelegate;
 
-@interface AwesomeMenu : UIView <AwesomeMenuItemDelegate>
+#define AWESOMEMENU_EXPANDING @"AwesomeMenuExpanding"
+#define AWESOMEMENU_CLOSING @"AwesomeMenuClosing"
 
-@property (nonatomic, copy) NSArray *menuItems;
-@property (nonatomic, strong) AwesomeMenuItem *startButton;
+@interface AwesomeMenu : UIView <AwesomeMenuItemDelegate> {
+    
+    NSArray *_menusArray;
+    NSUInteger _flag;
+    NSTimer *_timer;
+    AwesomeMenuItem *_addButton;
+    
+    __unsafe_unretained id<AwesomeMenuDelegate> _delegate;
+    BOOL _isAnimating;
+}
+@property (nonatomic, copy) NSArray *menusArray;
+@property (nonatomic, getter = isExpanding) BOOL expanding;
+@property (nonatomic, assign) id<AwesomeMenuDelegate> delegate;
 
-@property (nonatomic, getter = isExpanded) BOOL expanded;
-@property (nonatomic, weak) id<AwesomeMenuDelegate> delegate;
-
-@property (nonatomic, strong) UIImage *image;
-@property (nonatomic, strong) UIImage *highlightedImage;
-@property (nonatomic, strong) UIImage *contentImage;
-@property (nonatomic, strong) UIImage *highlightedContentImage;
+@property (nonatomic, retain) UIImage *image;
+@property (nonatomic, retain) UIImage *highlightedImage;
+@property (nonatomic, retain) UIImage *contentImage;
+@property (nonatomic, retain) UIImage *highlightedContentImage;
 
 @property (nonatomic, assign) CGFloat nearRadius;
 @property (nonatomic, assign) CGFloat endRadius;
@@ -33,26 +42,15 @@
 @property (nonatomic, assign) CGFloat menuWholeAngle;
 @property (nonatomic, assign) CGFloat expandRotation;
 @property (nonatomic, assign) CGFloat closeRotation;
-@property (nonatomic, assign) CGFloat animationDuration;
-@property (nonatomic, assign) BOOL    rotateAddButton;
 
-- (id)initWithFrame:(CGRect)frame startItem:(AwesomeMenuItem*)startItem menuItems:(NSArray *)menuItems;
+@property (assign, nonatomic) BOOL enabled;
 
-- (id)initWithFrame:(CGRect)frame startItem:(AwesomeMenuItem*)startItem optionMenus:(NSArray *)aMenusArray DEPRECATED_MSG_ATTRIBUTE("use -initWithFrame:startItem:menuItems: instead.");
-
-- (AwesomeMenuItem *)menuItemAtIndex:(NSUInteger)index;
-
-- (void)open;
-
-- (void)close;
+- (id)initWithFrame:(CGRect)frame menus:(NSArray *)aMenusArray;
 
 @end
 
 @protocol AwesomeMenuDelegate <NSObject>
-- (void)awesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx;
-@optional
-- (void)awesomeMenuDidFinishAnimationClose:(AwesomeMenu *)menu;
-- (void)awesomeMenuDidFinishAnimationOpen:(AwesomeMenu *)menu;
-- (void)awesomeMenuWillAnimateOpen:(AwesomeMenu *)menu;
-- (void)awesomeMenuWillAnimateClose:(AwesomeMenu *)menu;
+- (void)AwesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx;
+- (void)awesomeMenu:(AwesomeMenu *)menu isAnimating:(BOOL)flag;
+
 @end
